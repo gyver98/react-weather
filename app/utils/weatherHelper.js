@@ -39,7 +39,7 @@ function getForecastInfo (city) {
 
     return axios.get(url)
         .then(function(forecastData) {
-            console.log('5 day forecast : ', forecastData.data);
+            return forecastData.data;
         });
 }
 
