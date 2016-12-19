@@ -21,17 +21,10 @@ var GetCityContainer = React.createClass({
         
     },
     handleSubmitCity: function () {
-        var cityname = this.state.city;
+        console.log(this.state.city);
         // Fetch info from openweather then update state
-        weatherHelper.getCurrentWeather(cityname)
-        //weatherHelper.getFiveDayForecast(cityname)
-          .then(function (weather) {
-              this.setState({
-                  currentWeather: weather
-              })
-            console.log(this.state.city);
-            console.log(this.state.currentWeather);
-          }.bind(this));
+        //weatherHelper.getCurrentWeather(this.state.city);
+        weatherHelper.getForecastInfo(this.state.city);
     },
     handleUpdateCity: function (e) {
         this.setState({

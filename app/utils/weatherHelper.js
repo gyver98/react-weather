@@ -1,36 +1,49 @@
 var axios = require('axios');
 
-var APPID = "908e1e83b536c6baafacb6c77fbb6d82";
+var BASEURL = 'http://api.openweathermap.org/data/2.5/';
+var APIKEY = '908e1e83b536c6baafacb6c77fbb6d82';
 
-function getWeatherInfo (cityname) {
-    return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + cityname + '&type=accurate&APPID='+ APPID);
+function prepRouteParams (queryStringData) {
+    return Object.keys(queryStringData)
+        .map(function (key) {
+            return key + '=' + encodeURIComponent(queryStringData[key]);
+        }).join('&')
 }
 
-function getForecastInfo (cityname) {
-    return axios.get('http://api.openweathermap.org/data/2.5/forecast/daily?q=' + cityname + '&type=accurate&APPID='+ APPID + '&cnt=5');
+function prepUrl (type, queryStringData) {
+    return BASEURL + type + '?' + prepRouteParams(queryStringData);
 }
 
-var helpers = {
-    getCurrentWeather: function (cityname) {
-      //debugger;
-      return getWeatherInfo (cityname)
-        .then(function(info) {
-            return info;
-        })
-        .catch(function (err) {
-            console.warn('Error in getWeatherInfo: ', err);
-        })
-    },
-    getFiveDayForecast: function (cityname) {
-      //debugger;
-      return getForecastInfo (cityname)
-        .then(function(info) {
-            return info;
-        })
-        .catch(function (err) {
-            console.warn('Error in getForecastInfo: ', err);
-        })
+function getQueryStringData (city) {
+    return {
+        q: city,
+        type: 'accurate',
+        APPID: APIKEY,
+        cnt: 5
     }
-};
+}
 
-module.exports = helpers;
+function getCurrentWeather (city) {
+    var queryStringData = getQueryStringData(city);
+    var url = prepUrl('weather', queryStringData);
+
+    return axios.get(url)
+        .then(function(currentWeatherData) {
+            console.log('current weather info : ', currentWeatherData.data)
+        });
+}
+
+function getForecastInfo (city) {
+    var queryStringData = getQueryStringData(city);
+    var url = prepUrl('forecast/daily', queryStringData)
+
+    return axios.get(url)
+        .then(function(forecastData) {
+            console.log('5 day forecast : ', forecastData.data);
+        });
+}
+
+module.exports = {
+    getCurrentWeather: getCurrentWeather,
+    getForecastInfo: getForecastInfo
+};
