@@ -1,5 +1,6 @@
 var React = require('react');
 var ForecastContainer = require('../containers/ForecastContainer');
+var Loading = require('./Loading');
 
 // var styles = {
 //   container: {
@@ -20,11 +21,19 @@ var ForecastContainer = require('../containers/ForecastContainer');
 // }
 
 function Forecast (props) {
-    return (
+    if (props.isLoading === true) {
+        return (
+            <Loading text='One Moment' speed={500} />
+        )
+    } else {
+        console.log('forecast data : ', props.forecasts);
+        return (
         <div>
             Forecast dispalyed
         </div>
-    )
+        )
+    }
+    
 }
 
 module.exports = Forecast;
