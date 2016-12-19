@@ -6,12 +6,20 @@ var ForecastContainer = React.createClass({
     getInitialState: function () {
         return {
             isLoading: true,
-            forecasts: []
+            forecasts: {}
         }
     },
     componentDidMount: function () {
         //debugger;
-        weatherHelper.getForecastInfo(this.props.params.city)
+        this.makeRequest(this.props.routeParams.city);
+        
+    },
+    componentWillReceiveProps: function (nextProps) {
+        //debugger;
+        this.makeRequest(nextProps.routeParams.city);
+    },
+    makeRequest: function (city) {
+        weatherHelper.getForecastInfo(city)
             .then(function (forecasts) {
                 this.setState({
                     forecasts: forecasts,
