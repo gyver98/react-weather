@@ -41,7 +41,7 @@ function DayItem (props) {
     var date = getDate(props.day.dt);
     var icon = props.day.weather[0].icon;
     return (
-        <div style={styles.dayContainer}>
+        <div style={styles.dayContainer} onClick={props.handleClick}>
           <img style={styles.weather} src={'./app/images/weather-icons/'+icon+'.svg'} alt='Weather' />
           <h2 style={styles.subheader}>{date}</h2>
         </div>
@@ -50,11 +50,12 @@ function DayItem (props) {
 
 function ForecastUI (props) {
     return (
-        <div>
+        <div style={{textAlign: 'center'}}>
           <h1 style={styles.header}>{props.city}</h1>
+          <p style={styles.subheader}>Select a day</p>
           <div style={styles.container}>
             {props.forecast.list.map(function(listItem) {
-                return <DayItem key={listItem.dt} day={listItem} />
+                return <DayItem key={listItem.dt} day={listItem} handleClick={props.handleClick.bind(null, listItem)}/>
             } )}
           </div>
         </div>
@@ -67,7 +68,10 @@ function Forecast (props) {
             {
                 props.isLoading === true
                   ? <Loading />
-                  : <ForecastUI city={props.city} forecast={props.forecasts}/>
+                  : <ForecastUI 
+                        city={props.city} 
+                        forecast={props.forecasts}
+                        handleClick={props.handleClick} />
             }
         </div>
     )    
