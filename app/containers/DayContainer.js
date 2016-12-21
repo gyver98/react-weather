@@ -3,8 +3,9 @@ var Day = require('../components/Day');
 
 var DayContainer = React.createClass({
     render: function () {
+        //debugger;
         console.log('state weather : ', this.props.location.state.weather)
-        return <Day />
+        return <Day city={this.props.routeParams.city} weather={this.props.location.state.weather}/>
     }
 });
 
